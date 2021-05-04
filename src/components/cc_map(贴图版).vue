@@ -5,8 +5,6 @@
 <script>
 import * as THREE from "three";
 import envConifg from "../config/earth.config";
-import countryLine from "../utils/countryLine";
-import worldGeo from "../assets/geojson/world.geo";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 export default {
   name: "ccMap",
@@ -29,7 +27,7 @@ export default {
       });
       this.mapDom = this.$refs.map;
       this.renderer.setSize(this.mapDom.clientWidth, this.mapDom.clientHeight);
-      this.renderer.setClearColor(0x000, 1.0);
+      this.renderer.setClearColor(0xffffff, 1.0);
       this.mapDom.appendChild(this.renderer.domElement);
     },
     initCamera() {
@@ -49,7 +47,7 @@ export default {
     initAxisHelper() {
       // this.object.add(this.axisHelper);
       // 文章写到再用object
-      // this.scene.add(this.axisHelper);
+      this.scene.add(this.axisHelper);
     },
     initLight() {
       const ambientLight = new THREE.AmbientLight(0xffffff);
@@ -64,26 +62,16 @@ export default {
       os.minDistance = 100; // 向内最小外移动
       this.orbitControls = os;
     },
-    // initBg() {
-    //   const texture = this.textureLoader.load(envConifg.earthBg);
-    //   const geometry = new THREE.SphereGeometry(envConifg.r, 50, 50);
-    //   const material = new THREE.MeshLambertMaterial({
-    //     map: texture,
-    //   });
-    //   const mesh = new THREE.Mesh(geometry, material);
-
-    //   this.scene.add(mesh);
-    //   // this.scene.add(this.object);
-    // },
-    initEarth() {
-      const R = envConifg.r;
-      worldGeo.features.forEach((country) => {
-        if (country.geometry.type === "Polygon") {
-          country.geometry.coordinates = [country.geometry.coordinates];
-        }
-        var line = countryLine(R, country.geometry.coordinates);
-        this.scene.add(line);
+    initBg() {
+      const texture = this.textureLoader.load(envConifg.earthBg);
+      const geometry = new THREE.SphereGeometry(envConifg.r, 50, 50);
+      const material = new THREE.MeshLambertMaterial({
+        map: texture,
       });
+      const mesh = new THREE.Mesh(geometry, material);
+
+      this.scene.add(mesh);
+      // this.scene.add(this.object);
     },
     glRender() {
       this.renderer.render(this.scene, this.camera);
@@ -97,8 +85,7 @@ export default {
     this.initAxisHelper();
     this.initLight();
     this.initOrbitControls();
-    // this.initBg();
-    this.initEarth();
+    this.initBg();
     this.glRender();
   },
 };

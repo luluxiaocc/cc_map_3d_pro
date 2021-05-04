@@ -19,8 +19,8 @@ export default {
 #app {
   overflow: hidden;
   border: 1px solid #ccc;
-  width: 700px;
-  height: 600px;
-  margin: 20px auto;
+  width: 900px;
+  height: 700px;
+  margin: 6px auto;
 }
 </style>
